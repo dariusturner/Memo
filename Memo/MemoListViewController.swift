@@ -10,12 +10,16 @@ import UIKit
 
 class MemoListViewController: UITableViewController {
     
-    var itemArray = ["Item 1", "Item 2", "Item 3"]
+    var itemArray = [] as! [String]
+    
+    let defaults = UserDefaults.standard
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
+        if let items = defaults.array(forKey: "MemoListArray") as? [String] {
+            itemArray = items
+        }
     }
     
     //MARK - TableView Datasource Methods
@@ -79,6 +83,8 @@ class MemoListViewController: UITableViewController {
             } else {
                 
                 self.itemArray.append(memoTextField.text!)
+                
+                self.defaults.set(self.itemArray, forKey: "MemoListArray")
             
                 self.tableView.reloadData()
                 
