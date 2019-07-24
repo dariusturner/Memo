@@ -11,19 +11,13 @@ import UIKit
 class MemoListViewController: UITableViewController {
     
     var itemArray = [Memo]()
-    
-    let defaults = UserDefaults.standard
+    let dataFilePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("Memos.plist")
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let memo1 = Memo()
-        memo1.title = "First Memo"
-        itemArray.append(memo1)
+        loadMemos()
         
-        if let memos = defaults.array(forKey: "MemoListArray") as? [Memo] {
-            itemArray = memos
-        }
     }
     
     //MARK - TableView Datasource Methods
@@ -35,11 +29,9 @@ class MemoListViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "MemoItemCell", for: indexPath)
-        
         let memo = itemArray[indexPath.row]
         
         cell.textLabel!.text = memo.title
-        
         cell.accessoryType = memo.done ? .checkmark : .none
         
         return cell
@@ -53,13 +45,13 @@ class MemoListViewController: UITableViewController {
         
         itemArray[indexPath.row].done = !itemArray[indexPath.row].done
         
-        tableView.reloadData()
+        self.saveMemos()
         
         tableView.deselectRow(at: indexPath, animated: true)
         
     }
     
-    //MARK - Add New Items
+    //MARK - Add New Memos
     
     @IBAction func addButtonPressed(_ sender: UIBarButtonItem) {
         
@@ -89,24 +81,48 @@ class MemoListViewController: UITableViewController {
                 
                 self.itemArray.append(newMemo)
                 
-                self.defaults.set(self.itemArray, forKey: "MemoListArray")
-            
-                self.tableView.reloadData()
+                self.saveMemos()
                 
             }
             
         }
         
         addItemAlert.addTextField { (alertTextField) in
-            
             alertTextField.placeholder = "Create new memo"
             memoTextField = alertTextField
-            
         }
         
         addItemAlert.addAction(addItemAction)
-        
         present(addItemAlert, animated: true, completion: nil)
+        
+    }
+    
+    //MARK - Model Manipulation Methods
+    
+    func saveMemos() {
+        
+        let encoder = PropertyListEncoder()
+        do {
+            let data = try encoder.encode(itemArray)
+            try data.write(to: dataFilePath!)
+        } catch {
+            print("Error encoding itemArray, \(error)")
+        }
+        
+        self.tableView.reloadData()
+        
+    }
+    
+    func loadMemos() {
+        
+        if let data = try? Data(contentsOf: dataFilePath!) {
+            let decoder = PropertyListDecoder()
+            do {
+                itemArray = try decoder.decode([Memo].self, from: data)
+            } catch {
+                print("Error decoding the itemArray, \(error)")
+            }
+        }
         
     }
     

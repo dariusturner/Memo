@@ -8,7 +8,7 @@
 
 import Foundation
 
-class Memo {
+class Memo : Codable {
     
     var title : String = ""
     var done : Bool = false
