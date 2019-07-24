@@ -10,15 +10,19 @@ import UIKit
 
 class MemoListViewController: UITableViewController {
     
-    var itemArray = [] as! [String]
+    var itemArray = [Memo]()
     
     let defaults = UserDefaults.standard
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        if let items = defaults.array(forKey: "MemoListArray") as? [String] {
-            itemArray = items
+        let memo1 = Memo()
+        memo1.title = "First Memo"
+        itemArray.append(memo1)
+        
+        if let memos = defaults.array(forKey: "MemoListArray") as? [Memo] {
+            itemArray = memos
         }
     }
     
@@ -32,7 +36,11 @@ class MemoListViewController: UITableViewController {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "MemoItemCell", for: indexPath)
         
-        cell.textLabel!.text = itemArray[indexPath.row]
+        let memo = itemArray[indexPath.row]
+        
+        cell.textLabel!.text = memo.title
+        
+        cell.accessoryType = memo.done ? .checkmark : .none
         
         return cell
         
@@ -41,18 +49,11 @@ class MemoListViewController: UITableViewController {
     //MARK - TableView Delegate Methods
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+//        print(itemArray[indexPath.row])
         
-        print(itemArray[indexPath.row])
+        itemArray[indexPath.row].done = !itemArray[indexPath.row].done
         
-        if tableView.cellForRow(at: indexPath)?.accessoryType == .checkmark {
-            
-            tableView.cellForRow(at: indexPath)?.accessoryType = .none
-            
-        } else {
-            
-            tableView.cellForRow(at: indexPath)?.accessoryType = .checkmark
-            
-        }
+        tableView.reloadData()
         
         tableView.deselectRow(at: indexPath, animated: true)
         
@@ -82,7 +83,11 @@ class MemoListViewController: UITableViewController {
                 
             } else {
                 
-                self.itemArray.append(memoTextField.text!)
+                let newMemo = Memo()
+                newMemo.title = memoTextField.text!
+                newMemo.done = false
+                
+                self.itemArray.append(newMemo)
                 
                 self.defaults.set(self.itemArray, forKey: "MemoListArray")
             

@@ -12,6 +12,7 @@
 		6A9C7CBC22E474AF00205C0D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6A9C7CBA22E474AF00205C0D /* Main.storyboard */; };
 		6A9C7CBE22E474B300205C0D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6A9C7CBD22E474B300205C0D /* Assets.xcassets */; };
 		6A9C7CC122E474B300205C0D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6A9C7CBF22E474B300205C0D /* LaunchScreen.storyboard */; };
+		6A9C7CC922E72BE300205C0D /* Memo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A9C7CC822E72BE300205C0D /* Memo.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,6 +23,7 @@
 		6A9C7CBD22E474B300205C0D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		6A9C7CC022E474B300205C0D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		6A9C7CC222E474B300205C0D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		6A9C7CC822E72BE300205C0D /* Memo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Memo.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -55,13 +57,38 @@
 			isa = PBXGroup;
 			children = (
 				6A9C7CB622E474AF00205C0D /* AppDelegate.swift */,
-				6A9C7CB822E474AF00205C0D /* MemoListViewController.swift */,
-				6A9C7CBA22E474AF00205C0D /* Main.storyboard */,
+				6A9C7CCB22E72C1E00205C0D /* Controllers */,
+				6A9C7CCA22E72C0900205C0D /* Models */,
+				6A9C7CCC22E72C3100205C0D /* Views */,
 				6A9C7CBD22E474B300205C0D /* Assets.xcassets */,
 				6A9C7CBF22E474B300205C0D /* LaunchScreen.storyboard */,
 				6A9C7CC222E474B300205C0D /* Info.plist */,
 			);
 			path = Memo;
+			sourceTree = "<group>";
+		};
+		6A9C7CCA22E72C0900205C0D /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				6A9C7CC822E72BE300205C0D /* Memo.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		6A9C7CCB22E72C1E00205C0D /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				6A9C7CB822E474AF00205C0D /* MemoListViewController.swift */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
+		6A9C7CCC22E72C3100205C0D /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				6A9C7CBA22E474AF00205C0D /* Main.storyboard */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -135,6 +162,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6A9C7CC922E72BE300205C0D /* Memo.swift in Sources */,
 				6A9C7CB922E474AF00205C0D /* MemoListViewController.swift in Sources */,
 				6A9C7CB722E474AF00205C0D /* AppDelegate.swift in Sources */,
 			);
