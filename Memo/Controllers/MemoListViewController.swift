@@ -7,11 +7,14 @@
 //
 
 import UIKit
+import CoreData
 
 class MemoListViewController: UITableViewController {
     
     var itemArray = [Memo]()
     let dataFilePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("Memos.plist")
+    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,7 +44,9 @@ class MemoListViewController: UITableViewController {
     //MARK - TableView Delegate Methods
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//        print(itemArray[indexPath.row])
+        
+//        context.delete(itemArray[indexPath.row])
+//        itemArray.remove(at: indexPath.row)
         
         itemArray[indexPath.row].done = !itemArray[indexPath.row].done
         
@@ -75,12 +80,12 @@ class MemoListViewController: UITableViewController {
                 
             } else {
                 
-                let newMemo = Memo()
+                let newMemo = Memo(context: self.context)
+                
                 newMemo.title = memoTextField.text!
                 newMemo.done = false
                 
                 self.itemArray.append(newMemo)
-                
                 self.saveMemos()
                 
             }
@@ -101,29 +106,22 @@ class MemoListViewController: UITableViewController {
     
     func saveMemos() {
         
-        let encoder = PropertyListEncoder()
         do {
-            let data = try encoder.encode(itemArray)
-            try data.write(to: dataFilePath!)
+            try context.save()
         } catch {
-            print("Error encoding itemArray, \(error)")
+            print("Error saving context, \(error)")
         }
-        
         self.tableView.reloadData()
         
     }
     
     func loadMemos() {
-        
-        if let data = try? Data(contentsOf: dataFilePath!) {
-            let decoder = PropertyListDecoder()
-            do {
-                itemArray = try decoder.decode([Memo].self, from: data)
-            } catch {
-                print("Error decoding the itemArray, \(error)")
-            }
+        let request : NSFetchRequest<Memo> = Memo.fetchRequest()
+        do {
+           itemArray = try context.fetch(request)
+        } catch {
+            print("Error fetching data from context, \(error)")
         }
-        
     }
     
 
