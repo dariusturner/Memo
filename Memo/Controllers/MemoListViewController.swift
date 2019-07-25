@@ -14,10 +14,13 @@ class MemoListViewController: UITableViewController {
     var itemArray = [Memo]()
     let dataFilePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("Memos.plist")
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-
+    
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+
         
         loadMemos()
         
@@ -111,19 +114,50 @@ class MemoListViewController: UITableViewController {
         } catch {
             print("Error saving context, \(error)")
         }
-        self.tableView.reloadData()
+        tableView.reloadData()
         
     }
     
-    func loadMemos() {
-        let request : NSFetchRequest<Memo> = Memo.fetchRequest()
+    func loadMemos(with request: NSFetchRequest<Memo> = Memo.fetchRequest()) {
+//        let request : NSFetchRequest<Memo> = Memo.fetchRequest()
         do {
            itemArray = try context.fetch(request)
         } catch {
             print("Error fetching data from context, \(error)")
         }
+        tableView.reloadData()
     }
     
 
 }
 
+
+//MARK - Search Bar Methods
+
+extension MemoListViewController : UISearchBarDelegate {
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        
+        let request : NSFetchRequest<Memo> = Memo.fetchRequest()
+        
+        request.predicate = NSPredicate(format: "title CONTAINS[cd] %@", searchBar.text!)
+        
+        request.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
+        
+        loadMemos(with: request)
+        
+    }
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        
+        if searchBar.text?.count == 0 {
+            loadMemos()
+            
+            DispatchQueue.main.async {
+                searchBar.resignFirstResponder()
+            }
+            
+        }
+    }
+    
+}
