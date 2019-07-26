@@ -102,7 +102,7 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <segue destination="Phg-Rv-0Af" kind="show" identifier="goToItems" id="R6Q-gf-sTw"/>
+                        <segue destination="Phg-Rv-0Af" kind="show" identifier="goToMemos" id="R6Q-gf-sTw"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ORm-HO-bXz" userLabel="First Responder" sceneMemberID="firstResponder"/>

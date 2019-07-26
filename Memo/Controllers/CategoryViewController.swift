@@ -56,7 +56,7 @@ class CategoryViewController: UITableViewController {
         var categoryTextField = UITextField()
         
         //Error Alert
-        let textErrorAlert = UIAlertController(title: "Error", message: "Please add some text to your memo", preferredStyle: .alert)
+        let textErrorAlert = UIAlertController(title: "Error", message: "Please name your category", preferredStyle: .alert)
         let textErrorAlertAction = UIAlertAction(title: "Dismiss", style: .cancel, handler: nil)
         
         //Add Item Alert
