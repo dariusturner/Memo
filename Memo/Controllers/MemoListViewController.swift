@@ -12,17 +12,17 @@ import CoreData
 class MemoListViewController: UITableViewController {
     
     var itemArray = [Memo]()
-    let dataFilePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("Memos.plist")
+    var selectedCategory : Category? {
+        didSet {
+            loadMemos()
+        }
+    }
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
     
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-
-        
-        loadMemos()
         
     }
     
@@ -87,6 +87,7 @@ class MemoListViewController: UITableViewController {
                 
                 newMemo.title = memoTextField.text!
                 newMemo.done = false
+                newMemo.parentCategory = self.selectedCategory
                 
                 self.itemArray.append(newMemo)
                 self.saveMemos()
@@ -118,8 +119,16 @@ class MemoListViewController: UITableViewController {
         
     }
     
-    func loadMemos(with request: NSFetchRequest<Memo> = Memo.fetchRequest()) {
+    func loadMemos(with request: NSFetchRequest<Memo> = Memo.fetchRequest(), predicate : NSPredicate? = nil) {
 //        let request : NSFetchRequest<Memo> = Memo.fetchRequest()
+        let categoryPredicate = NSPredicate(format: "parentCategory.name MATCHES %@", selectedCategory!.name!)
+        
+        if let additionalPredicate = predicate {
+            request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [categoryPredicate, additionalPredicate])
+        } else {
+            request.predicate = categoryPredicate
+        }
+        
         do {
            itemArray = try context.fetch(request)
         } catch {
@@ -140,11 +149,11 @@ extension MemoListViewController : UISearchBarDelegate {
         
         let request : NSFetchRequest<Memo> = Memo.fetchRequest()
         
-        request.predicate = NSPredicate(format: "title CONTAINS[cd] %@", searchBar.text!)
+        let predicate = NSPredicate(format: "title CONTAINS[cd] %@", searchBar.text!)
         
         request.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
         
-        loadMemos(with: request)
+        loadMemos(with: request, predicate: predicate)
         
     }
     
