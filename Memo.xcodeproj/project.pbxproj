@@ -8,12 +8,9 @@
 
 /* Begin PBXBuildFile section */
 <<<<<<< HEAD
-<<<<<<< HEAD
 		691B942DF605F6D0004A2022 /* Pods_Memo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1C185034022659F2ABE3084D /* Pods_Memo.framework */; };
 		6A9659E722F05EBB00AD1E73 /* Memo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A9659E622F05EBB00AD1E73 /* Memo.swift */; };
 		6A9659E922F05ECC00AD1E73 /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A9659E822F05ECC00AD1E73 /* Category.swift */; };
-=======
->>>>>>> parent of e3858f0... Install RealmSwift Pods
 =======
 >>>>>>> parent of e3858f0... Install RealmSwift Pods
 		6A9C7CB722E474AF00205C0D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A9C7CB622E474AF00205C0D /* AppDelegate.swift */; };
@@ -26,12 +23,9 @@
 
 /* Begin PBXFileReference section */
 <<<<<<< HEAD
-<<<<<<< HEAD
 		1C185034022659F2ABE3084D /* Pods_Memo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Memo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6A9659E622F05EBB00AD1E73 /* Memo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Memo.swift; sourceTree = "<group>"; };
 		6A9659E822F05ECC00AD1E73 /* Category.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Category.swift; sourceTree = "<group>"; };
-=======
->>>>>>> parent of e3858f0... Install RealmSwift Pods
 =======
 >>>>>>> parent of e3858f0... Install RealmSwift Pods
 		6A9C7CB322E474AF00205C0D /* Memo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Memo.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -56,7 +50,6 @@
 
 /* Begin PBXGroup section */
 <<<<<<< HEAD
-<<<<<<< HEAD
 		0ABD823C905D4FEC5F05D494 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -66,8 +59,6 @@
 			path = Pods;
 			sourceTree = "<group>";
 		};
-=======
->>>>>>> parent of e3858f0... Install RealmSwift Pods
 =======
 >>>>>>> parent of e3858f0... Install RealmSwift Pods
 		6A9C7CAA22E474AF00205C0D = {
