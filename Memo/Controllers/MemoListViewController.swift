@@ -14,7 +14,7 @@ class MemoListViewController: UITableViewController {
     var itemArray = [Memo]()
     var selectedCategory : Category? {
         didSet {
-           // loadMemos()
+            loadMemos()
         }
     }
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
@@ -83,13 +83,13 @@ class MemoListViewController: UITableViewController {
                 
             } else {
                 
-//                let newMemo = Memo(context: self.context)
-//
-//                newMemo.title = memoTextField.text!
-//                newMemo.done = false
-//                newMemo.parentCategory = self.selectedCategory
-//                self.itemArray.append(newMemo)
+                let newMemo = Memo(context: self.context)
                 
+                newMemo.title = memoTextField.text!
+                newMemo.done = false
+                newMemo.parentCategory = self.selectedCategory
+                
+                self.itemArray.append(newMemo)
                 self.saveMemos()
                 
             }
@@ -119,23 +119,23 @@ class MemoListViewController: UITableViewController {
         
     }
     
-//    func loadMemos(with request: NSFetchRequest<Memo> = Memo.fetchRequest(), predicate : NSPredicate? = nil) {
-////        let request : NSFetchRequest<Memo> = Memo.fetchRequest()
-//        let categoryPredicate = NSPredicate(format: "parentCategory.name MATCHES %@", selectedCategory!.name!)
-//
-//        if let additionalPredicate = predicate {
-//            request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [categoryPredicate, additionalPredicate])
-//        } else {
-//            request.predicate = categoryPredicate
-//        }
-//
-//        do {
-//           itemArray = try context.fetch(request)
-//        } catch {
-//            print("Error fetching data from context, \(error)")
-//        }
-//        tableView.reloadData()
-//    }
+    func loadMemos(with request: NSFetchRequest<Memo> = Memo.fetchRequest(), predicate : NSPredicate? = nil) {
+//        let request : NSFetchRequest<Memo> = Memo.fetchRequest()
+        let categoryPredicate = NSPredicate(format: "parentCategory.name MATCHES %@", selectedCategory!.name!)
+        
+        if let additionalPredicate = predicate {
+            request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [categoryPredicate, additionalPredicate])
+        } else {
+            request.predicate = categoryPredicate
+        }
+        
+        do {
+           itemArray = try context.fetch(request)
+        } catch {
+            print("Error fetching data from context, \(error)")
+        }
+        tableView.reloadData()
+    }
     
 
 }
@@ -143,30 +143,30 @@ class MemoListViewController: UITableViewController {
 
 //MARK - Search Bar Methods
 
-//extension MemoListViewController : UISearchBarDelegate {
-//
-//    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-//
-//        let request : NSFetchRequest<Memo> = Memo.fetchRequest()
-//
-//        let predicate = NSPredicate(format: "title CONTAINS[cd] %@", searchBar.text!)
-//
-//        request.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
-//
-//        loadMemos(with: request, predicate: predicate)
-//
-//    }
-//
-//    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-//
-//        if searchBar.text?.count == 0 {
-//            loadMemos()
-//
-//            DispatchQueue.main.async {
-//                searchBar.resignFirstResponder()
-//            }
-//
-//        }
-//    }
-//
-//}
+extension MemoListViewController : UISearchBarDelegate {
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        
+        let request : NSFetchRequest<Memo> = Memo.fetchRequest()
+        
+        let predicate = NSPredicate(format: "title CONTAINS[cd] %@", searchBar.text!)
+        
+        request.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
+        
+        loadMemos(with: request, predicate: predicate)
+        
+    }
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        
+        if searchBar.text?.count == 0 {
+            loadMemos()
+            
+            DispatchQueue.main.async {
+                searchBar.resignFirstResponder()
+            }
+            
+        }
+    }
+    
+}
