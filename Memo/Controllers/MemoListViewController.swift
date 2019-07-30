@@ -7,11 +7,13 @@
 //
 
 import UIKit
-import CoreData
+import RealmSwift
 
 class MemoListViewController: UITableViewController {
     
-    var itemArray = [Memo]()
+    var toDoMemos : Results<Memo>?
+    let realm = try! Realm()
+    
     var selectedCategory : Category? {
         didSet {
             loadMemos()
@@ -29,16 +31,20 @@ class MemoListViewController: UITableViewController {
     //MARK - TableView Datasource Methods
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return itemArray.count
+        return toDoMemos?.count ?? 1
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "MemoItemCell", for: indexPath)
-        let memo = itemArray[indexPath.row]
         
-        cell.textLabel!.text = memo.title
-        cell.accessoryType = memo.done ? .checkmark : .none
+        if let memo = toDoMemos?[indexPath.row] {
+            cell.textLabel?.text = memo.title
+            cell.accessoryType = memo.done ? .checkmark : .none
+        } else {
+           cell.textLabel?.text = "No Memos Added"
+        }
+        
         
         return cell
         
@@ -48,12 +54,17 @@ class MemoListViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-//        context.delete(itemArray[indexPath.row])
-//        itemArray.remove(at: indexPath.row)
+        if let memo = toDoMemos?[indexPath.row] {
+            do {
+                try realm.write {
+                    memo.done = !memo.done
+                }
+            } catch {
+                print("Error saving done property, \(error)")
+            }
+        }
         
-        itemArray[indexPath.row].done = !itemArray[indexPath.row].done
-        
-        self.saveMemos()
+        tableView.reloadData()
         
         tableView.deselectRow(at: indexPath, animated: true)
         
@@ -83,14 +94,21 @@ class MemoListViewController: UITableViewController {
                 
             } else {
                 
-                let newMemo = Memo(context: self.context)
-                
-                newMemo.title = memoTextField.text!
-                newMemo.done = false
-                newMemo.parentCategory = self.selectedCategory
-                
-                self.itemArray.append(newMemo)
-                self.saveMemos()
+                if let currentCategory = self.selectedCategory {
+                    do {
+                        
+                        try self.realm.write {
+                        let newMemo = Memo()
+                        newMemo.title = memoTextField.text!
+                        currentCategory.memos.append(newMemo)
+                            
+                        }
+                    } catch {
+                        print("Error saving new memos, \(error)")
+                    }
+                }
+                    
+                    self.tableView.reloadData()
                 
             }
             
@@ -102,38 +120,17 @@ class MemoListViewController: UITableViewController {
         }
         
         addItemAlert.addAction(addItemAction)
-        present(addItemAlert, animated: true, completion: nil)
+        self.present(addItemAlert, animated: true, completion: nil)
         
     }
     
     //MARK - Model Manipulation Methods
     
-    func saveMemos() {
-        
-        do {
-            try context.save()
-        } catch {
-            print("Error saving context, \(error)")
-        }
-        tableView.reloadData()
-        
-    }
     
-    func loadMemos(with request: NSFetchRequest<Memo> = Memo.fetchRequest(), predicate : NSPredicate? = nil) {
-//        let request : NSFetchRequest<Memo> = Memo.fetchRequest()
-        let categoryPredicate = NSPredicate(format: "parentCategory.name MATCHES %@", selectedCategory!.name!)
+    func loadMemos() {
         
-        if let additionalPredicate = predicate {
-            request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [categoryPredicate, additionalPredicate])
-        } else {
-            request.predicate = categoryPredicate
-        }
+        toDoMemos = selectedCategory?.memos.sorted(byKeyPath: "title", ascending: true)
         
-        do {
-           itemArray = try context.fetch(request)
-        } catch {
-            print("Error fetching data from context, \(error)")
-        }
         tableView.reloadData()
     }
     
@@ -143,30 +140,30 @@ class MemoListViewController: UITableViewController {
 
 //MARK - Search Bar Methods
 
-extension MemoListViewController : UISearchBarDelegate {
-    
-    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        
-        let request : NSFetchRequest<Memo> = Memo.fetchRequest()
-        
-        let predicate = NSPredicate(format: "title CONTAINS[cd] %@", searchBar.text!)
-        
-        request.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
-        
-        loadMemos(with: request, predicate: predicate)
-        
-    }
-    
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        
-        if searchBar.text?.count == 0 {
-            loadMemos()
-            
-            DispatchQueue.main.async {
-                searchBar.resignFirstResponder()
-            }
-            
-        }
-    }
-    
-}
+//extension MemoListViewController : UISearchBarDelegate {
+//
+//    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+//
+//        let request : NSFetchRequest<Memo> = Memo.fetchRequest()
+//
+//        let predicate = NSPredicate(format: "title CONTAINS[cd] %@", searchBar.text!)
+//
+//        request.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
+//
+//        loadMemos(with: request, predicate: predicate)
+//
+//    }
+//
+//    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+//
+//        if searchBar.text?.count == 0 {
+//            loadMemos()
+//
+//            DispatchQueue.main.async {
+//                searchBar.resignFirstResponder()
+//            }
+//
+//        }
+//    }
+//
+//}
