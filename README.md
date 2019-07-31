@@ -8,3 +8,4 @@ Memo is an app that lets user put in a "To Do List" and are able to set alerts f
 - CoreData
 - SearchBar Feature
 - UIAlerts
+- Realm
