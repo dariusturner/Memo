@@ -98,10 +98,10 @@ class MemoListViewController: UITableViewController {
                     do {
                         
                         try self.realm.write {
-                        let newMemo = Memo()
-                        newMemo.title = memoTextField.text!
-                        currentCategory.memos.append(newMemo)
-                            
+                            let newMemo = Memo()
+                            newMemo.title = memoTextField.text!
+                            newMemo.dateCreated = Date()
+                            currentCategory.memos.append(newMemo)
                         }
                     } catch {
                         print("Error saving new memos, \(error)")
@@ -140,30 +140,26 @@ class MemoListViewController: UITableViewController {
 
 //MARK - Search Bar Methods
 
-//extension MemoListViewController : UISearchBarDelegate {
-//
-//    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-//
-//        let request : NSFetchRequest<Memo> = Memo.fetchRequest()
-//
-//        let predicate = NSPredicate(format: "title CONTAINS[cd] %@", searchBar.text!)
-//
-//        request.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
-//
-//        loadMemos(with: request, predicate: predicate)
-//
-//    }
-//
-//    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-//
-//        if searchBar.text?.count == 0 {
-//            loadMemos()
-//
-//            DispatchQueue.main.async {
-//                searchBar.resignFirstResponder()
-//            }
-//
-//        }
-//    }
-//
-//}
+extension MemoListViewController : UISearchBarDelegate {
+
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        
+        toDoMemos = toDoMemos?.filter("title CONTAINS[cd] %@", searchBar.text!).sorted(byKeyPath: "dateCreated", ascending: true)
+        
+        tableView.reloadData()
+
+    }
+
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+
+        if searchBar.text?.count == 0 {
+            loadMemos()
+
+            DispatchQueue.main.async {
+                searchBar.resignFirstResponder()
+            }
+
+        }
+    }
+
+}
