@@ -19,8 +19,6 @@ class MemoListViewController: UITableViewController {
             loadMemos()
         }
     }
-    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-    
     
 
     override func viewDidLoad() {
@@ -163,3 +161,5 @@ extension MemoListViewController : UISearchBarDelegate {
     }
 
 }
+
+

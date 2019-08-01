@@ -7,5 +7,6 @@ target 'Memo' do
   # Pods for Memo
 
 pod 'RealmSwift'
+pod 'SwipeCellKit'
 
 end
