@@ -8,11 +8,14 @@
 
 import UIKit
 import RealmSwift
+import ChameleonFramework
 
-class MemoListViewController: UITableViewController {
+class MemoListViewController: SwipeTableTableViewController {
     
     var toDoMemos : Results<Memo>?
     let realm = try! Realm()
+    
+    @IBOutlet weak var searchBar: UISearchBar!
     
     var selectedCategory : Category? {
         didSet {
@@ -23,8 +26,40 @@ class MemoListViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+    
+        tableView.separatorStyle = .none
+        
+
+        
         
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        
+        title = selectedCategory?.name
+
+        guard let colorHex = selectedCategory?.color else {fatalError()}
+        
+        updateNavBar(withHexCode: colorHex)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        updateNavBar(withHexCode: "4FFF53")
+    }
+    
+    //MARK - Nav Bar Setup Methods
+    
+    func updateNavBar(withHexCode colorHexCode: String) {
+        guard let navBar = navigationController?.navigationBar else {fatalError("Navigation controller does not exist.")}
+        
+        guard let navBarColor = UIColor(hexString: colorHexCode) else {fatalError()}
+        
+        navBar.barTintColor = navBarColor
+        navBar.tintColor = ContrastColorOf(navBarColor, returnFlat: true)
+        navBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor : ContrastColorOf(navBarColor, returnFlat: true)]
+        searchBar.barTintColor = navBarColor
+    }
+    
     
     //MARK - TableView Datasource Methods
     
@@ -34,10 +69,16 @@ class MemoListViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: "MemoItemCell", for: indexPath)
+        let cell = super.tableView(tableView, cellForRowAt: indexPath)
         
         if let memo = toDoMemos?[indexPath.row] {
             cell.textLabel?.text = memo.title
+            
+            if let color = (HexColor(selectedCategory!.color))!.darken(byPercentage: CGFloat(indexPath.row) / (CGFloat(toDoMemos!.count) + 10.0)) {
+                cell.backgroundColor = color
+                cell.textLabel?.textColor = ContrastColorOf(color, returnFlat: true)
+            }
+            
             cell.accessoryType = memo.done ? .checkmark : .none
         } else {
            cell.textLabel?.text = "No Memos Added"
@@ -124,12 +165,27 @@ class MemoListViewController: UITableViewController {
     
     //MARK - Model Manipulation Methods
     
-    
     func loadMemos() {
         
         toDoMemos = selectedCategory?.memos.sorted(byKeyPath: "title", ascending: true)
         
         tableView.reloadData()
+    }
+    
+    //MARK: - Delete Data From Swipe
+    
+    override func updateModel(at indexPath: IndexPath) {
+        if let memoForDeletion = self.toDoMemos?[indexPath.row] {
+            do {
+                try self.realm.write {
+                    self.realm.delete(memoForDeletion)
+                }
+            } catch {
+                print("Error deleting category, \(error)")
+            }
+            
+            tableView.reloadData()
+        }
     }
     
 

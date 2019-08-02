@@ -10,6 +10,7 @@
 		691B942DF605F6D0004A2022 /* Pods_Memo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1C185034022659F2ABE3084D /* Pods_Memo.framework */; };
 		6A1A262822F0BF06006EAFFA /* Memo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A1A262722F0BF06006EAFFA /* Memo.swift */; };
 		6A1A262A22F0BF12006EAFFA /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A1A262922F0BF12006EAFFA /* Category.swift */; };
+		6A3E155D22F3A1480039C733 /* SwipeTableTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A3E155C22F3A1480039C733 /* SwipeTableTableViewController.swift */; };
 		6A9C7CB722E474AF00205C0D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A9C7CB622E474AF00205C0D /* AppDelegate.swift */; };
 		6A9C7CB922E474AF00205C0D /* MemoListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A9C7CB822E474AF00205C0D /* MemoListViewController.swift */; };
 		6A9C7CBC22E474AF00205C0D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6A9C7CBA22E474AF00205C0D /* Main.storyboard */; };
@@ -22,6 +23,7 @@
 		1C185034022659F2ABE3084D /* Pods_Memo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Memo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6A1A262722F0BF06006EAFFA /* Memo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Memo.swift; sourceTree = "<group>"; };
 		6A1A262922F0BF12006EAFFA /* Category.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Category.swift; sourceTree = "<group>"; };
+		6A3E155C22F3A1480039C733 /* SwipeTableTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeTableTableViewController.swift; sourceTree = "<group>"; };
 		6A9C7CB322E474AF00205C0D /* Memo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Memo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6A9C7CB622E474AF00205C0D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		6A9C7CB822E474AF00205C0D /* MemoListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoListViewController.swift; sourceTree = "<group>"; };
@@ -101,6 +103,7 @@
 			children = (
 				6A9C7CF122EA75AC00205C0D /* CategoryViewController.swift */,
 				6A9C7CB822E474AF00205C0D /* MemoListViewController.swift */,
+				6A3E155C22F3A1480039C733 /* SwipeTableTableViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -237,6 +240,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6A9C7CF222EA75AC00205C0D /* CategoryViewController.swift in Sources */,
+				6A3E155D22F3A1480039C733 /* SwipeTableTableViewController.swift in Sources */,
 				6A1A262A22F0BF12006EAFFA /* Category.swift in Sources */,
 				6A9C7CB922E474AF00205C0D /* MemoListViewController.swift in Sources */,
 				6A9C7CB722E474AF00205C0D /* AppDelegate.swift in Sources */,
